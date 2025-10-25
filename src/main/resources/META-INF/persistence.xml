@@ -1,9 +1,33 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd"
-             version="3.2">
-    <persistence-unit name="default">
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+                                 https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
 
+    <persistence-unit name="mediaCatalogPU" transaction-type="JTA">
+        <jta-data-source>java:/PostgresDS</jta-data-source>
+
+        <!-- Entidades JPA -->
+        <class>com.dlopez.mediacatalog.entity.MediaTitle</class>
+        <class>com.dlopez.mediacatalog.entity.MovieGenre</class>
+        <class>com.dlopez.mediacatalog.entity.MediaFile</class>
+
+        <properties>
+            <!-- 👇 Propiedad correcta para Hibernate -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
+            <!-- Dialecto PostgreSQL -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+
+            <!-- Mostrar SQL generado -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.highlight_sql" value="true"/>
+
+            <!-- Cache desactivado para desarrollo -->
+            <property name="hibernate.cache.use_second_level_cache" value="false"/>
+            <property name="hibernate.cache.use_query_cache" value="false"/>
+        </properties>
     </persistence-unit>
 </persistence>
