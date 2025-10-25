@@ -1,16 +1,94 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: danii
-  Date: 25/10/2025
-  Time: 12:43
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-</body>
+<h:head>
+    <title>Catálogo Multimedia</title>
+</h:head>
+
+<h:body>
+    <h:form id="formMedia">
+
+        <p:growl id="msgs" showDetail="true" life="3000" />
+
+        <p:toolbar>
+            <p:toolbarGroup align="left">
+                <p:commandButton value="Nuevo Título" icon="pi pi-plus"
+                                 actionListener="#{mediaBean.prepareNew}"
+                                 update=":dialogMedia"
+                                 oncomplete="PF('dlgMedia').show()" />
+            </p:toolbarGroup>
+        </p:toolbar>
+
+        <p:dataTable id="tblMedia" value="#{mediaBean.titles}" var="m"
+                     paginator="true" rows="10" responsiveLayout="scroll">
+
+            <p:column headerText="Nombre">
+                <h:outputText value="#{m.titleName}" />
+            </p:column>
+
+            <p:column headerText="Tipo" width="120">
+                <h:outputText value="#{m.titleType}" />
+            </p:column>
+
+            <p:column headerText="Año" width="100">
+                <h:outputText value="#{m.releaseYear}" />
+            </p:column>
+
+            <p:column headerText="Géneros">
+                <h:outputText value="#{m.genres}" />
+            </p:column>
+
+            <p:column headerText="Acciones" width="150">
+                <p:commandButton icon="pi pi-pencil" title="Editar"
+                                 actionListener="#{mediaBean.setSelected(m)}"
+                                 update=":dialogMedia"
+                                 oncomplete="PF('dlgMedia').show()" />
+                <p:commandButton icon="pi pi-trash" title="Eliminar"
+                                 actionListener="#{mediaBean.delete(m)}"
+                                 update="@form"
+                                 styleClass="ui-button-danger" />
+            </p:column>
+        </p:dataTable>
+
+        <!-- Diálogo para agregar/editar -->
+        <p:dialog id="dialogMedia" header="Título Multimedia" modal="true" widgetVar="dlgMedia"
+                  resizable="false" width="550">
+            <h:panelGrid columns="2" cellpadding="5">
+
+                <h:outputLabel for="name" value="Nombre:" />
+                <p:inputText id="name" value="#{mediaBean.selected.titleName}" required="true" maxlength="150" />
+
+                <h:outputLabel for="type" value="Tipo:" />
+                <p:selectOneMenu id="type" value="#{mediaBean.selected.titleType}" required="true">
+                    <f:selectItems value="#{mediaBean.types}" var="t" itemValue="#{t}" itemLabel="#{t}" />
+                </p:selectOneMenu>
+
+                <h:outputLabel for="year" value="Año de lanzamiento:" />
+                <p:inputNumber id="year" value="#{mediaBean.selected.releaseYear}" minValue="1900" maxValue="2100" />
+
+                <h:outputLabel for="synopsis" value="Sinopsis:" />
+                <p:inputTextarea id="synopsis" value="#{mediaBean.selected.synopsis}" rows="4" cols="40" maxlength="1000" />
+
+                <h:outputLabel for="rating" value="Calificación promedio:" />
+                <p:inputNumber id="rating" value="#{mediaBean.selected.averageRating}" minValue="0" maxValue="10" />
+
+                <h:outputLabel for="genres" value="Géneros:" />
+                <p:selectCheckboxMenu id="genres" value="#{mediaBean.selected.genres}"
+                                      label="Seleccionar" multiple="true" panelStyle="width:250px">
+                    <f:selectItems value="#{mediaBean.allGenres}" var="g" itemValue="#{g}" itemLabel="#{g.genreName}" />
+                </p:selectCheckboxMenu>
+            </h:panelGrid>
+
+            <p:separator />
+
+            <p:commandButton value="Guardar" icon="pi pi-check"
+                             actionListener="#{mediaBean.save}"
+                             update=":formMedia"
+                             oncomplete="PF('dlgMedia').hide()" />
+        </p:dialog>
+    </h:form>
+</h:body>
 </html>

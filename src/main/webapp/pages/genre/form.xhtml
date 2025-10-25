@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head><title>Nuevo Género</title></h:head>
+<h:body>
+    <h:form>
+        <p:messages />
+        <p:panel header="Registrar Género">
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputLabel for="nombre" value="Nombre del Género:" />
+                <p:inputText id="nombre" value="#{genreBean.selected.genreName}" required="true" maxlength="50" />
+            </h:panelGrid>
+            <p:commandButton value="Guardar" actionListener="#{genreBean.save}" update="@form" />
+            <p:linkButton value="Volver" outcome="list.xhtml" icon="pi pi-arrow-left" />
+        </p:panel>
+    </h:form>
+</h:body>
 </html>
